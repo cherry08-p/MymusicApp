@@ -1,4 +1,60 @@
-<audio controls>
-  <source src="သင့်ရဲ့_mp3_raw_link_ကို_ဒီမှာထည့်ပါ" type="audio/mpeg">
-  Your browser does not support the audio element.
-</audio>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cherry08 Music Player</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            color: white;
+        }
+        .player-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+            text-align: center;
+            width: 300px;
+        }
+        h2 { margin-bottom: 20px; font-size: 1.5rem; }
+        audio {
+            width: 100%;
+            margin-top: 20px;
+            filter: sepia(20%) saturate(70%) grayscale(100%) contrast(99%) invert(12%);
+        }
+        .github-link {
+            margin-top: 20px;
+            display: block;
+            color: #ddd;
+            text-decoration: none;
+            font-size: 0.8rem;
+        }
+        .github-link:hover { color: white; }
+    </style>
+</head>
+<body>
+
+    <div class="player-card">
+        <h2>🎵 My Music App</h2>
+        <p>Cherry08 Project</p>
+        
+        <audio controls>
+            <source src="https://raw.githubusercontent.com/cherry08-p/MymusicApp/main/your-song.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+
+        <a href="https://github.com/cherry08-p/MymusicApp" class="github-link" target="_blank">
+            View on GitHub
+        </a>
+    </div>
+
+</body>
+</html>
