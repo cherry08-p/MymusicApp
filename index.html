@@ -8,23 +8,29 @@
         body {
             font-family: 'Segoe UI', sans-serif;
             background: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%);
-            display: flex; justify-content: center; align-items: center;
-            height: 100vh; margin: 0;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            min-height: 100vh; margin: 0; padding: 20px;
+        }
+        .info-section {
+            text-align: center; margin-bottom: 20px; color: #333;
+        }
+        .info-section a {
+            color: #007bff; text-decoration: none; font-weight: bold;
         }
         .player-card {
             background: white; padding: 30px; border-radius: 25px;
             box-shadow: 0 15px 35px rgba(0,0,0,0.2);
-            width: 350px; text-align: center;
+            width: 100%; max-width: 350px; text-align: center;
         }
         .song-info h2 { margin: 10px 0 5px; color: #333; }
         .song-info p { color: #888; margin-bottom: 20px; }
         audio { width: 100%; margin-bottom: 20px; }
         .playlist {
             list-style: none; padding: 0; text-align: left;
-            max-height: 150px; overflow-y: auto; border-top: 1px solid #eee;
+            max-height: 200px; overflow-y: auto; border-top: 1px solid #eee;
         }
         .playlist li {
-            padding: 10px; cursor: pointer; border-bottom: 1px solid #eee;
+            padding: 12px; cursor: pointer; border-bottom: 1px solid #eee;
             transition: 0.3s; color: #555;
         }
         .playlist li:hover { background: #f0f7ff; color: #007bff; }
@@ -33,22 +39,37 @@
 </head>
 <body>
 
-<div class="player-card">
-    <div class="song-info">
-        <h2>🎵 My Music App</h2>
-        <p id="track-name">Cherry08 Project</p>
+    <div class="info-section">
+        <h1>Cherry08 Project - GitHub Link</h1>
+        <p>Project ကို ဒီမှာကြည့်ပါ - 
+            <a href="https://cherry08-p.github.io/MymusicApp/" target="_blank">MymusicApp Link</a>
+        </p>
     </div>
 
-    <audio id="audio-player" controls>
-        <source src="" type="audio/mpeg">
-    </audio>
+    <div class="player-card">
+        <div class="song-info">
+            <h2>🎵 Play Music</h2>
+            <p id="track-name">သီချင်းရွေးချယ်ပါ</p>
+        </div>
 
-    <ul class="playlist" id="playlist">
-        <li class="active" data-src="သီချင်း_Link_1">သီချင်း အမည် ၁</li>
-        <li data-src="သီချင်း_Link_2">သီချင်း အမည် ၂</li>
-        <li data-src="သီချင်း_Link_3">သီချင်း အမည် ၃</li>
-    </ul>
-</div>
+        <audio id="audio-player" controls>
+            <source src="" type="audio/mpeg">
+            Your browser does not support the audio element.
+        </audio>
+
+        <ul class="playlist" id="playlist">
+            <li class="active" data-src="https://raw.githubusercontent.com/cherry08-p/MymusicApp/main/m1.mp3">သီချင်း အမည် ၁</li>
+            <li data-src="https://raw.githubusercontent.com/cherry08-p/MymusicApp/main/m2.mp3">သီချင်း အမည် ၂</li>
+            <li data-src="https://raw.githubusercontent.com/cherry08-p/MymusicApp/main/m3.mp3">သီချင်း အမည် ၃</li>
+            <li data-src="https://raw.githubusercontent.com/cherry08-p/MymusicApp/main/m4.mp3">သီချင်း အမည် ၄</li>
+            <li data-src="https://raw.githubusercontent.com/cherry08-p/MymusicApp/main/m5.mp3">သီချင်း အမည် ၅</li>
+                        <li data-src="https://raw.githubusercontent.com/cherry08-p/MymusicApp/main/m6.mp3">သီချင်း အမည် ၆</li>
+                       <li data-src="https://raw.githubusercontent.com/cherry08-p/MymusicApp/main/m7.mp3">သီချင်း အမည် ၇</li>
+           <li data-src="https://raw.githubusercontent.com/cherry08-p/MymusicApp/main/m8.mp3">သီချင်း အမည် ၈</li>
+                      <li data-src="https://raw.githubusercontent.com/cherry08-p/MymusicApp/main/m9.mp3">သီချင်း အမည် ၉</li> 
+          <li data-src="https://raw.githubusercontent.com/cherry08-p/MymusicApp/main/m10.mp3">သီချင်း အမည် ၁၀</li> 
+        </ul>
+    </div>
 
 <script>
     const player = document.getElementById('audio-player');
@@ -58,17 +79,14 @@
     let currentTrack = 0;
 
     function playTrack(index) {
-        // Active class ပြောင်းခြင်း
         for (let track of tracks) track.classList.remove('active');
         tracks[index].classList.add('active');
         
-        // သီချင်းဖွင့်ခြင်း
         player.src = tracks[index].getAttribute('data-src');
         trackName.innerText = tracks[index].innerText;
         player.play();
     }
 
-    // Playlist ထဲက တစ်ပုဒ်ချင်းစီကို နှိပ်ရင် ဖွင့်ရန်
     for (let i = 0; i < tracks.length; i++) {
         tracks[i].onclick = () => {
             currentTrack = i;
@@ -76,15 +94,15 @@
         };
     }
 
-    // သီချင်းတစ်ပုဒ် ဆုံးသွားရင် နောက်တစ်ပုဒ် အလိုအလျောက် ဆက်ဖွင့်ရန်
     player.onended = () => {
         currentTrack++;
-        if (currentTrack >= tracks.length) currentTrack = 0; // အကုန်ဆုံးရင် ပထမဆုံးပုဒ် ပြန်ဖွင့်ရန်
+        if (currentTrack >= tracks.length) currentTrack = 0;
         playTrack(currentTrack);
     };
 
-    // ပထမဆုံး သီချင်းကို အသင့်လုပ်ထားပေးရန်
+    // ပထမဆုံး သီချင်းကို Load လုပ်ထားရန်
     player.src = tracks[0].getAttribute('data-src');
+    trackName.innerText = tracks[0].innerText;
 </script>
 
 </body>
