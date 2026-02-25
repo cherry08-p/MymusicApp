@@ -3,58 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cherry08 Music Player</title>
+    <title>Cherry08 Auto Playlist Player</title>
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 0;
-            color: white;
-        }
-        .player-card {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 2rem;
-            border-radius: 20px;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 8px 32px rgba(0,0,0,0.3);
-            text-align: center;
-            width: 300px;
-        }
-        h2 { margin-bottom: 20px; font-size: 1.5rem; }
-        audio {
-            width: 100%;
-            margin-top: 20px;
-            filter: sepia(20%) saturate(70%) grayscale(100%) contrast(99%) invert(12%);
-        }
-        .github-link {
-            margin-top: 20px;
-            display: block;
-            color: #ddd;
-            text-decoration: none;
-            font-size: 0.8rem;
-        }
-        .github-link:hover { color: white; }
+        body { font-family: sans-serif; background: #121212; color: white; display: flex; justify-content: center; padding-top: 50px; }
+        .player-container { background: #1e1e1e; padding: 20px; border-radius: 15px; width: 350px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        h2 { text-align: center; color: #1DB954; }
+        audio { width: 100%; margin: 20px 0; }
+        .playlist { list-style: none; padding: 0; max-height: 200px; overflow-y: auto; }
+        .playlist li { padding: 10px; cursor: pointer; border-bottom: 1px solid #333; }
+        .playlist li:hover { background: #333; }
+        .active { background: #1DB954 !important; color: black; font-weight: bold; }
     </style>
 </head>
 <body>
 
-    <div class="player-card">
-        <h2>🎵 My Music App</h2>
-        <p>Cherry08 Project</p>
-        
-        <audio controls>
-            <source src="https://raw.githubusercontent.com/cherry08-p/MymusicApp/main/your-song.mp3" type="audio/mpeg">
-            Your browser does not support the audio element.
-        </audio>
+<div class="player-container">
+    <h2>🎵 Cherry08 Player</h2>
+    <p id="now-playing">သီချင်းရွေးချယ်ပါ</p>
+    
+    <audio id="main-player" controls autoplay>
+        <source src="" type="audio/mpeg">
+    </audio>
 
-        <a href="https://github.com/cherry08-p/MymusicApp" class="github-link" target="_blank">
-            View on GitHub
-        </a>
-    </div>
+    <ul class="playlist" id="playlist">
+        <li data-src="သီချင်း_Link_၁_ကိုဒီမှာထည့်ပါ">Song Title 1</li>
+        <li data-src="သီချင်း_Link_၂_ကိုဒီမှာထည့်ပါ">Song Title 2</li>
+        <li data-src="သီချင်း_Link_၃_ကိုဒီမှာထည့်ပါ">Song Title 3</li>
+    </ul>
+</div>
+
+<script>
+    const player = document.getElementById('main-player');
+    const playlist = document.getElementById('playlist');
+    const tracks = playlist.getElementsByTagName('li');
+    const nowPlaying = document.getElementById('now-playing');
+    let currentTrack = 0;
+
+    function loadTrack(index) {
+        for (let i = 0; i < tracks.length; i++) tracks[i].classList.remove('active');
+        
+        const source = tracks[index].getAttribute('data-src');
+        player.src = source;
+        tracks[index].classList.add('active');
+        nowPlaying.innerText = "Playing: " + tracks[index].innerText;
+        player.play();
+    }
+
+    // သီချင်းတစ်ပုဒ်ကို နှိပ်ရင် ဖွင့်ပေးရန်
+    for (let i = 0; i < tracks.length; i++) {
+        tracks[i].addEventListener('click', function() {
+            currentTrack = i;
+            loadTrack(currentTrack);
+        });
+    }
+
+    // သီချင်းဆုံးသွားရင် နောက်တစ်ပုဒ် အလိုအလျောက်ဖွင့်ရန်
+    player.addEventListener('ended', function() {
+        currentTrack++;
+        if (currentTrack >= tracks.length) currentTrack = 0; // အစကပြန်ဖွင့်ရန်
+        loadTrack(currentTrack);
+    });
+</script>
 
 </body>
 </html>
