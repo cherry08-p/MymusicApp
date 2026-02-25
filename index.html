@@ -3,66 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cherry08 Auto Playlist Player</title>
+    <title>Cherry08 Music App</title>
     <style>
-        body { font-family: sans-serif; background: #121212; color: white; display: flex; justify-content: center; padding-top: 50px; }
-        .player-container { background: #1e1e1e; padding: 20px; border-radius: 15px; width: 350px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        h2 { text-align: center; color: #1DB954; }
-        audio { width: 100%; margin: 20px 0; }
-        .playlist { list-style: none; padding: 0; max-height: 200px; overflow-y: auto; }
-        .playlist li { padding: 10px; cursor: pointer; border-bottom: 1px solid #333; }
-        .playlist li:hover { background: #333; }
-        .active { background: #1DB954 !important; color: black; font-weight: bold; }
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%);
+            display: flex; justify-content: center; align-items: center;
+            height: 100vh; margin: 0;
+        }
+        .player-card {
+            background: white; padding: 30px; border-radius: 25px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            width: 350px; text-align: center;
+        }
+        .song-info h2 { margin: 10px 0 5px; color: #333; }
+        .song-info p { color: #888; margin-bottom: 20px; }
+        audio { width: 100%; margin-bottom: 20px; }
+        .playlist {
+            list-style: none; padding: 0; text-align: left;
+            max-height: 150px; overflow-y: auto; border-top: 1px solid #eee;
+        }
+        .playlist li {
+            padding: 10px; cursor: pointer; border-bottom: 1px solid #eee;
+            transition: 0.3s; color: #555;
+        }
+        .playlist li:hover { background: #f0f7ff; color: #007bff; }
+        .active { background: #e7f3ff; color: #007bff !important; font-weight: bold; }
     </style>
 </head>
 <body>
 
-<div class="player-container">
-    <h2>🎵 Cherry08 Player</h2>
-    <p id="now-playing">သီချင်းရွေးချယ်ပါ</p>
-    
-    <audio id="main-player" controls autoplay>
+<div class="player-card">
+    <div class="song-info">
+        <h2>🎵 My Music App</h2>
+        <p id="track-name">Cherry08 Project</p>
+    </div>
+
+    <audio id="audio-player" controls>
         <source src="" type="audio/mpeg">
     </audio>
 
     <ul class="playlist" id="playlist">
-        <li data-src="သီချင်း_Link_၁_ကိုဒီမှာထည့်ပါ">Song Title 1</li>
-        <li data-src="သီချင်း_Link_၂_ကိုဒီမှာထည့်ပါ">Song Title 2</li>
-        <li data-src="သီချင်း_Link_၃_ကိုဒီမှာထည့်ပါ">Song Title 3</li>
+        <li class="active" data-src="သီချင်း_Link_1">သီချင်း အမည် ၁</li>
+        <li data-src="သီချင်း_Link_2">သီချင်း အမည် ၂</li>
+        <li data-src="သီချင်း_Link_3">သီချင်း အမည် ၃</li>
     </ul>
 </div>
 
 <script>
-    const player = document.getElementById('main-player');
+    const player = document.getElementById('audio-player');
     const playlist = document.getElementById('playlist');
     const tracks = playlist.getElementsByTagName('li');
-    const nowPlaying = document.getElementById('now-playing');
+    const trackName = document.getElementById('track-name');
     let currentTrack = 0;
 
-    function loadTrack(index) {
-        for (let i = 0; i < tracks.length; i++) tracks[i].classList.remove('active');
-        
-        const source = tracks[index].getAttribute('data-src');
-        player.src = source;
+    function playTrack(index) {
+        // Active class ပြောင်းခြင်း
+        for (let track of tracks) track.classList.remove('active');
         tracks[index].classList.add('active');
-        nowPlaying.innerText = "Playing: " + tracks[index].innerText;
+        
+        // သီချင်းဖွင့်ခြင်း
+        player.src = tracks[index].getAttribute('data-src');
+        trackName.innerText = tracks[index].innerText;
         player.play();
     }
 
-    // သီချင်းတစ်ပုဒ်ကို နှိပ်ရင် ဖွင့်ပေးရန်
+    // Playlist ထဲက တစ်ပုဒ်ချင်းစီကို နှိပ်ရင် ဖွင့်ရန်
     for (let i = 0; i < tracks.length; i++) {
-        tracks[i].addEventListener('click', function() {
+        tracks[i].onclick = () => {
             currentTrack = i;
-            loadTrack(currentTrack);
-        });
+            playTrack(currentTrack);
+        };
     }
 
-    // သီချင်းဆုံးသွားရင် နောက်တစ်ပုဒ် အလိုအလျောက်ဖွင့်ရန်
-    player.addEventListener('ended', function() {
+    // သီချင်းတစ်ပုဒ် ဆုံးသွားရင် နောက်တစ်ပုဒ် အလိုအလျောက် ဆက်ဖွင့်ရန်
+    player.onended = () => {
         currentTrack++;
-        if (currentTrack >= tracks.length) currentTrack = 0; // အစကပြန်ဖွင့်ရန်
-        loadTrack(currentTrack);
-    });
+        if (currentTrack >= tracks.length) currentTrack = 0; // အကုန်ဆုံးရင် ပထမဆုံးပုဒ် ပြန်ဖွင့်ရန်
+        playTrack(currentTrack);
+    };
+
+    // ပထမဆုံး သီချင်းကို အသင့်လုပ်ထားပေးရန်
+    player.src = tracks[0].getAttribute('data-src');
 </script>
 
 </body>
