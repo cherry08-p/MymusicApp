@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EaintcherryMB Premium Player</title>
+    <title>EaintcherryMB All-in-One Player</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Pyidaungsu&family=Noto+Sans+Myanmar:wght@400;700&display=swap" rel="stylesheet">
     
@@ -44,15 +44,22 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
         
-        #current-song { color: var(--primary-color); font-weight: bold; margin-bottom: 15px; min-height: 2em; }
+        #current-song { color: var(--primary-color); font-weight: bold; margin-bottom: 15px; min-height: 2.5em; display: flex; align-items: center; justify-content: center; }
         audio { width: 100%; filter: invert(90%); }
 
-        /* Search Bar Style */
-        .search-container { width: 95%; max-width: 500px; margin-top: 20px; }
+        .search-container { width: 95%; max-width: 500px; margin-top: 20px; display: flex; gap: 10px; }
         #search-input {
-            width: 100%; padding: 12px; border-radius: 12px; border: none;
+            flex: 1; padding: 12px; border-radius: 12px; border: none;
             background: var(--item-bg); color: white; outline: none; font-size: 16px;
         }
+
+        /* Offline File Upload Button */
+        .file-label {
+            background: var(--primary-color); color: black; padding: 10px; 
+            border-radius: 12px; cursor: pointer; font-weight: bold; font-size: 14px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        #file-upload { display: none; }
 
         .controls { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 15px; }
         .btn {
@@ -68,6 +75,7 @@
         }
         .song-item.active { border-left: 5px solid var(--primary-color); background: #333; }
         .song-info { cursor: pointer; flex: 1; text-align: left; padding-right: 10px; }
+        .tag-offline { font-size: 9px; background: #555; padding: 2px 5px; border-radius: 4px; margin-right: 5px; vertical-align: middle; }
 
         .action-btns { display: flex; gap: 5px; }
         .dl-btn { background: #444; color: #1db954; border: none; padding: 6px 10px; border-radius: 5px; cursor: pointer; text-decoration: none; font-size: 12px; }
@@ -95,7 +103,11 @@
     </div>
 
     <div class="search-container">
-        <input type="text" id="search-input" placeholder="သီချင်းနာမည်ဖြင့် ရှာပါ..." onkeyup="filterSongs()">
+        <input type="text" id="search-input" placeholder="သီချင်းရှာပါ..." onkeyup="filterSongs()">
+        <label for="file-upload" class="file-label" title="ဖုန်းထဲမှ သီချင်းဖွင့်ရန်">
+            📁 Local
+        </label>
+        <input type="file" id="file-upload" accept="audio/*" multiple onchange="handleOfflineFiles(event)">
     </div>
 
     <ul id="playlist">
@@ -129,13 +141,32 @@
                     .filter(file => file.name && file.name.toLowerCase().endsWith('.mp3'))
                     .map(file => ({
                         name: file.name.replace('.mp3', '').replace(/[-_]/g, ' '),
-                        url: file.download_url
+                        url: file.download_url,
+                        isOffline: false
                     }));
                 
-                filteredSongs = [...allSongs];
-                document.getElementById('loader').style.display = 'none';
-                renderPlaylist(filteredSongs);
+                updateDisplay();
             } catch (e) { console.error(e); }
+        }
+
+        // Offline Files (ဖုန်း/Computer ထဲမှဖိုင်များ) ကို ကိုင်တွယ်ခြင်း
+        function handleOfflineFiles(event) {
+            const files = event.target.files;
+            for (let file of files) {
+                const objectURL = URL.createObjectURL(file);
+                allSongs.unshift({
+                    name: file.name.replace('.mp3', '').replace(/[-_]/g, ' '),
+                    url: objectURL,
+                    isOffline: true
+                });
+            }
+            updateDisplay();
+        }
+
+        function updateDisplay() {
+            filteredSongs = [...allSongs];
+            document.getElementById('loader').style.display = 'none';
+            renderPlaylist(filteredSongs);
         }
 
         function renderPlaylist(songsToDisplay) {
@@ -145,12 +176,16 @@
                 const li = document.createElement('li');
                 li.className = "song-item";
                 li.id = "song-" + index;
+                
+                const offlineTag = song.isOffline ? `<span class="tag-offline">OFFLINE</span>` : "";
+                const downloadBtn = song.isOffline ? "" : `<a href="${song.url}" download="${song.name}.mp3" class="dl-btn">⬇ DL</a>`;
+
                 li.innerHTML = `
                     <div class="song-info" onclick="playSong(${index})">
-                        ${song.name}
+                        ${offlineTag}${song.name}
                     </div>
                     <div class="action-btns">
-                        <a href="${song.url}" download="${song.name}.mp3" class="dl-btn">⬇ DL</a>
+                        ${downloadBtn}
                         <button class="dl-btn" onclick="shareSong('${song.name}')">🔗</button>
                     </div>
                 `;
@@ -172,7 +207,8 @@
             currentSongTitle.innerText = filteredSongs[index].name;
             
             document.querySelectorAll('.song-item').forEach(el => el.classList.remove('active'));
-            document.getElementById("song-"+index).classList.add('active');
+            const activeItem = document.getElementById("song-"+index);
+            if(activeItem) activeItem.classList.add('active');
         }
 
         function nextSong() {
@@ -210,9 +246,8 @@
         };
 
         function shareSong(name) {
-            const url = window.location.href;
             if (navigator.share) {
-                navigator.share({ title: 'Music', text: 'နားဆင်ကြည့်ပါ: ' + name, url: url });
+                navigator.share({ title: 'Music', text: 'နားဆင်ကြည့်ပါ: ' + name, url: window.location.href });
             } else {
                 alert("Link copied!");
             }
