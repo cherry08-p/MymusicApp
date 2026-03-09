@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EaintcherryMB Music Player</title>
+    <title>EaintcherryMB Premium Player</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Pyidaungsu&family=Noto+Sans+Myanmar:wght@400;700&display=swap" rel="stylesheet">
     
@@ -14,182 +14,88 @@
             --item-bg: #282828;
             --item-hover: #3e3e3e;
             --text-main: #ffffff;
-            --text-secondary: #b3b3b3;
         }
 
         body { 
-            font-family: 'Pyidaungsu', 'Noto Sans Myanmar', sans-serif; 
+            font-family: 'Pyidaungsu', sans-serif; 
             color: var(--text-main); 
             display: flex; 
             flex-direction: column; 
             align-items: center; 
             padding: 20px; 
             margin: 0;
-            min-height: 100vh;
-            background-image: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('shop-bg.jpg'); 
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
             background-color: var(--bg-dark);
         }
 
-        /* Marquee Text */
         .marquee {
-            width: 100%;
-            max-width: 500px;
-            overflow: hidden;
-            white-space: nowrap;
-            margin-bottom: 25px;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 50px;
-            padding: 5px 0;
+            width: 100%; max-width: 500px; overflow: hidden; white-space: nowrap;
+            margin-bottom: 20px; background: rgba(255,255,255,0.05); border-radius: 50px;
         }
         .marquee h2 {
-            display: inline-block;
-            padding-left: 100%;
-            animation: marquee 25s linear infinite;
-            color: var(--primary-color);
-            font-size: 1rem;
-            margin: 0;
+            display: inline-block; padding-left: 100%; animation: marquee 25s linear infinite;
+            color: var(--primary-color); font-size: 0.9rem; margin: 5px 0;
         }
-        @keyframes marquee {
-            0% { transform: translate(0, 0); }
-            100% { transform: translate(-100%, 0); }
-        }
+        @keyframes marquee { 0% { transform: translate(0, 0); } 100% { transform: translate(-100%, 0); } }
 
-        /* Player Controls Box */
         .player-container { 
-            width: 95%; 
-            max-width: 500px; 
-            background: #181818;
-            padding: 25px 20px; 
-            border-radius: 25px; 
-            box-shadow: 0 10px 40px rgba(0,0,0,0.6); 
-            text-align: center; 
-            position: sticky; 
-            top: 10px; 
-            z-index: 100; 
+            width: 95%; max-width: 500px; background: #181818; padding: 20px; 
+            border-radius: 25px; box-shadow: 0 10px 40px rgba(0,0,0,0.6); 
+            text-align: center; position: sticky; top: 10px; z-index: 100;
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
         
-        #current-song { 
-            font-size: 1.2em; 
-            font-weight: bold; 
-            color: var(--primary-color); 
-            margin-bottom: 15px; 
-            min-height: 2.5em;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        #current-song { color: var(--primary-color); font-weight: bold; margin-bottom: 15px; min-height: 2em; }
+        audio { width: 100%; filter: invert(90%); }
+
+        /* Search Bar Style */
+        .search-container { width: 95%; max-width: 500px; margin-top: 20px; }
+        #search-input {
+            width: 100%; padding: 12px; border-radius: 12px; border: none;
+            background: var(--item-bg); color: white; outline: none; font-size: 16px;
         }
 
-        audio { width: 100%; height: 45px; filter: invert(90%); border-radius: 8px; }
-
-        .controls {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            margin-top: 15px;
-        }
+        .controls { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 15px; }
         .btn {
-            background: #333;
-            border: none;
-            color: white;
-            padding: 10px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: bold;
-            flex: 1;
-            transition: 0.3s;
+            background: #333; border: none; color: white; padding: 10px;
+            border-radius: 8px; cursor: pointer; font-size: 12px; transition: 0.3s;
         }
-        .btn:hover { background: #444; }
         .active-mode { background: var(--primary-color) !important; color: black !important; }
 
-        /* Playlist Section */
-        #playlist { 
-            list-style: none; 
-            padding: 0; 
-            margin-top: 25px; 
-            width: 95%; 
-            max-width: 500px; 
-        }
+        #playlist { list-style: none; padding: 0; margin-top: 20px; width: 95%; max-width: 500px; }
         .song-item { 
-            background: var(--item-bg);
-            margin-bottom: 12px; 
-            padding: 15px 20px; 
-            border-radius: 15px; 
-            transition: 0.2s ease;
-            border: 1px solid transparent;
+            background: var(--item-bg); margin-bottom: 10px; padding: 12px 15px; 
+            border-radius: 12px; display: flex; justify-content: space-between; align-items: center;
         }
-        .song-item:hover { background: var(--item-hover); }
-        .song-item.active { 
-            border: 1px solid var(--primary-color);
-            background: #2e2e2e;
-        }
+        .song-item.active { border-left: 5px solid var(--primary-color); background: #333; }
+        .song-info { cursor: pointer; flex: 1; text-align: left; padding-right: 10px; }
 
-        .song-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .song-info { 
-            cursor: pointer; 
-            font-size: 1rem;
-            color: var(--text-main);
-            flex: 1;
-            padding-right: 10px;
-            text-align: left;
-        }
-        .song-item.active .song-info { color: var(--primary-color); font-weight: bold; }
+        .action-btns { display: flex; gap: 5px; }
+        .dl-btn { background: #444; color: #1db954; border: none; padding: 6px 10px; border-radius: 5px; cursor: pointer; text-decoration: none; font-size: 12px; }
         
-        .share-btn {
-            background: #404040;
-            color: #fff;
-            border: none;
-            padding: 8px 12px;
-            border-radius: 8px;
-            font-size: 11px;
-            cursor: pointer;
-        }
-
-        /* Loading Spinner */
-        .loader {
-            border: 4px solid #333;
-            border-top: 4px solid var(--primary-color);
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 40px auto;
-        }
+        .loader { border: 4px solid #333; border-top: 4px solid var(--primary-color); border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin: 20px auto; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        /* Mobile Optimization */
-        @media (max-width: 480px) {
-            .player-container { padding: 15px; }
-            #current-song { font-size: 1em; }
-            .btn { font-size: 11px; padding: 8px; }
-        }
     </style>
 </head>
 <body>
 
     <div class="marquee">
-        <h2>🎵 အိမ့်ချယ်ရီမိုဘိုင်း music — “အိမ့်ချယ်ရီ မိုဘိုင်းလ်နှင့်လျှပ်စစ်” အမှတ်(၅)ရပ်ကွက်၊ဒို့အင်အားဆိုင်ရှေ့၊ ကုန်သည်လမ်း၊လပွတ္တာမြို့။ ဖုန်း-09790199067-09262450004 အားပေးမှုကို ကျေးဇူးတင်ပါသည်🎵</h2>
+        <h2>🎵 အိမ့်ချယ်ရီမိုဘိုင်းလ် - ကုန်သည်လမ်း၊ လပွတ္တာမြို့။ ဖုန်း-09790199067 🎵</h2>
     </div>
 
     <div class="player-container">
         <div id="current-song">သီချင်းရွေးချယ်ပါ</div>
-        <audio id="audio-player" controls preload="auto"></audio>
+        <audio id="audio-player" controls></audio>
         
         <div class="controls">
             <button class="btn" onclick="prevSong()">⏮ Prev</button>
+            <button class="btn" id="shuffle-btn" onclick="toggleShuffle()">🔀 Shuffle Off</button>
             <button class="btn" id="repeat-btn" onclick="toggleRepeat()">🔁 Repeat Off</button>
             <button class="btn" onclick="nextSong()">Next ⏭</button>
         </div>
+    </div>
+
+    <div class="search-container">
+        <input type="text" id="search-input" placeholder="သီချင်းနာမည်ဖြင့် ရှာပါ..." onkeyup="filterSongs()">
     </div>
 
     <ul id="playlist">
@@ -203,137 +109,115 @@
             { username: "cherry08-p", repo: "MymusicApp" }
         ];
 
-        const playlistElement = document.getElementById('playlist');
+        let allSongs = [];
+        let filteredSongs = [];
+        let currentIndex = -1;
+        let isShuffle = false;
+        let repeatMode = 'off';
+
         const audioPlayer = document.getElementById('audio-player');
         const currentSongTitle = document.getElementById('current-song');
-        const repeatBtn = document.getElementById('repeat-btn');
 
-        let songs = [];
-        let currentIndex = -1;
-        let repeatMode = 'off'; // off, all, one
-
-        // GitHub မှ သီချင်းများ ရယူခြင်း
         async function fetchSongs() {
             try {
                 const fetchPromises = sources.map(src => 
                     fetch(`https://api.github.com/repos/${src.username}/${src.repo}/contents/`)
-                    .then(res => res.ok ? res.json() : [])
-                    .catch(() => [])
+                    .then(res => res.json()).catch(() => [])
                 );
-
                 const results = await Promise.all(fetchPromises);
-                
-                // MP3 ဖိုင်များကို စစ်ထုတ်ပြီး List ထဲထည့်ခြင်း
-                songs = results.flat()
+                allSongs = results.flat()
                     .filter(file => file.name && file.name.toLowerCase().endsWith('.mp3'))
                     .map(file => ({
                         name: file.name.replace('.mp3', '').replace(/[-_]/g, ' '),
-                        url: file.download_url,
-                        originalName: file.name
+                        url: file.download_url
                     }));
                 
-                if (songs.length === 0) {
-                    playlistElement.innerHTML = "<li style='text-align:center'>သီချင်းများ ရှာမတွေ့ပါ။</li>";
-                    return;
-                }
-                
+                filteredSongs = [...allSongs];
                 document.getElementById('loader').style.display = 'none';
-                renderPlaylist();
-            } catch (error) {
-                playlistElement.innerHTML = "<li style='text-align:center; color:red;'>Error: API ချိတ်ဆက်မှု မအောင်မြင်ပါ။</li>";
-            }
+                renderPlaylist(filteredSongs);
+            } catch (e) { console.error(e); }
         }
 
-        // Playlist ကို UI ပေါ်တင်ခြင်း
-        function renderPlaylist() {
-            playlistElement.innerHTML = ""; 
-            songs.forEach((song, index) => {
+        function renderPlaylist(songsToDisplay) {
+            const playlistElement = document.getElementById('playlist');
+            playlistElement.innerHTML = "";
+            songsToDisplay.forEach((song, index) => {
                 const li = document.createElement('li');
                 li.className = "song-item";
                 li.id = "song-" + index;
-                
                 li.innerHTML = `
-                    <div class="song-content">
-                        <div class="song-info" onclick="playSong(${index})">
-                            ${index + 1}. ${song.name}
-                        </div>
-                        <button class="share-btn" onclick="shareSong('${song.name}')">
-                            Share 🔗
-                        </button>
+                    <div class="song-info" onclick="playSong(${index})">
+                        ${song.name}
+                    </div>
+                    <div class="action-btns">
+                        <a href="${song.url}" download="${song.name}.mp3" class="dl-btn">⬇ DL</a>
+                        <button class="dl-btn" onclick="shareSong('${song.name}')">🔗</button>
                     </div>
                 `;
                 playlistElement.appendChild(li);
             });
         }
 
-        // သီချင်းဖွင့်ခြင်း
+        function filterSongs() {
+            const term = document.getElementById('search-input').value.toLowerCase();
+            filteredSongs = allSongs.filter(s => s.name.toLowerCase().includes(term));
+            renderPlaylist(filteredSongs);
+        }
+
         function playSong(index) {
-            if (index < 0 || index >= songs.length) return;
+            if (index < 0 || index >= filteredSongs.length) return;
             currentIndex = index;
+            audioPlayer.src = filteredSongs[index].url;
+            audioPlayer.play();
+            currentSongTitle.innerText = filteredSongs[index].name;
             
-            audioPlayer.src = songs[index].url;
-            audioPlayer.play().catch(e => console.log("Auto-play blocked or error:", e));
-            currentSongTitle.innerText = songs[index].name;
-            
-            // Active UI Update
-            document.querySelectorAll('.song-item').forEach(item => item.classList.remove('active'));
-            const activeItem = document.getElementById("song-" + index);
-            if(activeItem) {
-                activeItem.classList.add('active');
-                activeItem.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            }
+            document.querySelectorAll('.song-item').forEach(el => el.classList.remove('active'));
+            document.getElementById("song-"+index).classList.add('active');
         }
 
         function nextSong() {
-            let next = (currentIndex + 1 >= songs.length) ? 0 : currentIndex + 1;
+            let next;
+            if (isShuffle) {
+                next = Math.floor(Math.random() * filteredSongs.length);
+            } else {
+                next = (currentIndex + 1 >= filteredSongs.length) ? 0 : currentIndex + 1;
+            }
             playSong(next);
         }
 
         function prevSong() {
-            let prev = (currentIndex - 1 < 0) ? songs.length - 1 : currentIndex - 1;
+            let prev = (currentIndex - 1 < 0) ? filteredSongs.length - 1 : currentIndex - 1;
             playSong(prev);
         }
 
+        function toggleShuffle() {
+            isShuffle = !isShuffle;
+            const btn = document.getElementById('shuffle-btn');
+            btn.innerText = isShuffle ? "🔀 Shuffle On" : "🔀 Shuffle Off";
+            btn.classList.toggle('active-mode', isShuffle);
+        }
+
         function toggleRepeat() {
-            if (repeatMode === 'off') {
-                repeatMode = 'all';
-                repeatBtn.innerText = "🔁 Repeat All";
-                repeatBtn.classList.add('active-mode');
-            } else if (repeatMode === 'all') {
-                repeatMode = 'one';
-                repeatBtn.innerText = "🔂 Repeat One";
-                repeatBtn.classList.add('active-mode');
-            } else {
-                repeatMode = 'off';
-                repeatBtn.innerText = "🔁 Repeat Off";
-                repeatBtn.classList.remove('active-mode');
-            }
+            const btn = document.getElementById('repeat-btn');
+            if (repeatMode === 'off') { repeatMode = 'all'; btn.innerText = "🔁 Repeat All"; btn.classList.add('active-mode'); }
+            else if (repeatMode === 'all') { repeatMode = 'one'; btn.innerText = "🔂 Repeat One"; }
+            else { repeatMode = 'off'; btn.innerText = "🔁 Repeat Off"; btn.classList.remove('active-mode'); }
         }
 
-        function shareSong(name) {
-            const shareData = {
-                title: 'EaintcherryMB Music',
-                text: `နားဆင်ကြည့်ပါ - ${name}`,
-                url: window.location.href
-            };
-            if (navigator.share) {
-                navigator.share(shareData);
-            } else {
-                navigator.clipboard.writeText(`${shareData.text} \n ${shareData.url}`);
-                alert("Link ကို Copy ကူးပြီးပါပြီ!");
-            }
-        }
-
-        // သီချင်းတစ်ပုဒ်ပြီးလျှင် လုပ်ဆောင်ချက်
         audioPlayer.onended = () => {
-            if (repeatMode === 'one') {
-                audioPlayer.play();
-            } else {
-                nextSong();
-            }
+            if (repeatMode === 'one') audioPlayer.play();
+            else nextSong();
         };
 
-        // စတင်ချိန်တွင် သီချင်းများ ခေါ်ယူရန်
+        function shareSong(name) {
+            const url = window.location.href;
+            if (navigator.share) {
+                navigator.share({ title: 'Music', text: 'နားဆင်ကြည့်ပါ: ' + name, url: url });
+            } else {
+                alert("Link copied!");
+            }
+        }
+
         fetchSongs();
     </script>
 </body>
